@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STUDENT</title>
+    <style>
+      form {
+        background-image: url(cs.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      li {
+        float: left;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      li a:hover {
+        background-color: #111;
+      }
+      a {
+        padding-right: 25px;
+        text-decoration: none;
+        color: rgb(11, 172, 24);
+      }
+
+      #hd {
+        color: rgb(10, 2, 2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="hd">
+      <h3 align="center">
+        <mark>STUDENT DETAILS </mark>
+        <hr />
+      </h3>
+
+      <ul>
+        <li><a class="active" href="Home2.html">Home</a></li>
+        <li><a href="New_Course.html">New Student</a></li>
+        <li><a href="Update.html">Modify Student</a></li>
+        <li><a href="Remove.html">Delete Student</a></li>
+        <li><a href="Read.php">View Student</a></li>
+      </ul>
+    </div>
+
+    <form action="Save.php" method="post">
+        <center>
+      <h3>
+        <b>New Student</b>
+        <hr />
+      </h3>
+
+      <p style="background-image: url('login.jpg')">
+        <i> Student Name :</i> <input type="text" name="cna" /> <br /><br />
+        <i> Student Contact :</i> <input type="number" name="cfe" />
+        <br /><br />
+        <i> Student Address :</i> <input type="text" name="cad" /> <br /><br />
+        <button type="reset">Clear</button>
+        <button type="submit">Submit</button>
+        <br><br><br><br><br><br>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    </center>
+      </p>
+    </form>
+  </body>
+</html>

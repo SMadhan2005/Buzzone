@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STUDENt</title>
+    <style>
+      form {
+        background-image: url(cs.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      li {
+        float: left;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      li a:hover {
+        background-color: #111;
+      }
+
+      #hd {
+        color: rgb(10, 2, 2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="hd">
+      <h3 align="center">
+        <mark>STUDENT DETAILS </mark>
+        <hr />
+      </h3>
+
+      <ul>
+        <li><a class="active" href="Home2.html">Home</a></li>
+        <li><a href="New_Course.html">New Student</a></li>
+        <li><a href="Update.html">Modify Student</a></li>
+        <li><a href="Remove.html">Delete Student</a></li>
+        <li><a href="Read.php">View Student</a></li>
+      </ul>
+    </div>
+
+    <center>
+      <form action="Delete.php" method="post">
+        <h3>
+          Remove Student
+          <hr />
+        </h3>
+
+        <i>Student ID : </i><input type="text" name="cid" /> <br /><br />
+        <button type="reset">Clear</button>
+        <button type="submit">Submit</button>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br /><br /><br />
+      </form>
+    </center>
+  </body>
+</html>
