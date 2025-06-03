@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Bus Reservation System</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#" class="active">Manage Buses</a></li>
+            <li><a href="#" id="viewBookings">View Bookings</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <section class="add-bus-section">
+          <h2>Add New Bus</h2>
+          <form id="addBusForm" class="add-bus-form">
+            <div class="form-group">
+              <label for="busNumber">Bus Number:</label>
+              <input type="text" id="busNumber" required />
+            </div>
+            <div class="form-group">
+              <label for="from">From:</label>
+              <input type="text" id="from" required />
+            </div>
+            <div class="form-group">
+              <label for="to">To:</label>
+              <input type="text" id="to" required />
+            </div>
+            <div class="form-group">
+              <label for="departure">Departure Date and Time:</label>
+              <input type="datetime-local" id="departure" required />
+            </div>
+            <div class="form-group">
+              <label for="totalSeats">Total Seats:</label>
+              <input type="number" id="totalSeats" min="1" required />
+            </div>
+            <div class="form-group">
+              <label for="price">Price per Seat ($):</label>
+              <input type="number" id="price" min="0" step="0.01" required />
+            </div>
+            <button type="submit" class="btn">Add Bus</button>
+          </form>
+        </section>
+
+        <section class="buses-list-section">
+          <h2>Manage Buses</h2>
+          <div id="adminBusList" class="bus-list">
+            <!-- Buses will be dynamically added here -->
+          </div>
+        </section>
+
+        <section id="bookingsSection" class="bookings-section hidden">
+          <h2>All Bookings</h2>
+          <div id="adminBookingsList" class="bookings-list">
+            <!-- Bookings will be dynamically added here -->
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; 2024 Bus Reservation System. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <script>
+      // Check if admin is logged in
+      if (!localStorage.getItem("adminLoggedIn")) {
+        window.location.href = "admin-login.html";
+      }
+
+      // DOM Elements
+      const addBusForm = document.getElementById("addBusForm");
+      const adminBusList = document.getElementById("adminBusList");
+      const viewBookingsBtn = document.getElementById("viewBookings");
+      const bookingsSection = document.getElementById("bookingsSection");
+      const adminBookingsList = document.getElementById("adminBookingsList");
+      const logoutBtn = document.getElementById("logout");
+
+      // Event Listeners
+      addBusForm.addEventListener("submit", handleAddBus);
+      viewBookingsBtn.addEventListener("click", toggleBookingsView);
+      logoutBtn.addEventListener("click", handleLogout);
+
+      // Handle add bus form submission
+      function handleAddBus(e) {
+        e.preventDefault();
+
+        const newBus = {
+          id: Date.now(),
+          busNumber: document.getElementById("busNumber").value,
+          from: document.getElementById("from").value,
+          to: document.getElementById("to").value,
+          departure: document.getElementById("departure").value,
+          totalSeats: parseInt(document.getElementById("totalSeats").value),
+          availableSeats: parseInt(document.getElementById("totalSeats").value),
+          price: parseFloat(document.getElementById("price").value),
+        };
+
+        // Get existing buses from localStorage
+        let buses = JSON.parse(localStorage.getItem("buses")) || [];
+        buses.push(newBus);
+        localStorage.setItem("buses", JSON.stringify(buses));
+
+        // Reset form and update display
+        addBusForm.reset();
+        displayBuses();
+        alert("Bus added successfully!");
+      }
+
+      // Display buses in admin view
+      function displayBuses() {
+        const buses = JSON.parse(localStorage.getItem("buses")) || [];
+        adminBusList.innerHTML = "";
+
+        buses.forEach((bus) => {
+          const busCard = document.createElement("div");
+          busCard.className = "bus-card";
+          busCard.innerHTML = `
+                    <h3>Bus ${bus.busNumber}</h3>
+                    <p>From: ${bus.from}</p>
+                    <p>To: ${bus.to}</p>
+                    <p>Departure: ${new Date(
+                      bus.departure
+                    ).toLocaleString()}</p>
+                    <p>Available Seats: ${bus.availableSeats}/${
+            bus.totalSeats
+          }</p>
+                    <p>Price: $${bus.price.toFixed(2)}</p>
+                    <button class="btn btn-danger" onclick="deleteBus(${
+                      bus.id
+                    })">Delete Bus</button>
+                `;
+          adminBusList.appendChild(busCard);
+        });
+      }
+
+      // Delete bus
+      function deleteBus(busId) {
+        if (confirm("Are you sure you want to delete this bus?")) {
+          let buses = JSON.parse(localStorage.getItem("buses")) || [];
+          buses = buses.filter((bus) => bus.id !== busId);
+          localStorage.setItem("buses", JSON.stringify(buses));
+          displayBuses();
+        }
+      }
+
+      // Toggle between buses and bookings view
+      function toggleBookingsView() {
+        const busesListSection = document.querySelector(".buses-list-section");
+        busesListSection.classList.toggle("hidden");
+        bookingsSection.classList.toggle("hidden");
+
+        if (!bookingsSection.classList.contains("hidden")) {
+          displayBookings();
+        }
+      }
+
+      // Display all bookings
+      function displayBookings() {
+        const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+        adminBookingsList.innerHTML = "";
+
+        bookings.forEach((booking) => {
+          const bookingCard = document.createElement("div");
+          bookingCard.className = "bus-card";
+          bookingCard.innerHTML = `
+                    <h3>Booking #${booking.id}</h3>
+                    <p>Bus: ${booking.busNumber}</p>
+                    <p>From: ${booking.from}</p>
+                    <p>To: ${booking.to}</p>
+                    <p>Departure: ${new Date(
+                      booking.departure
+                    ).toLocaleString()}</p>
+                    <p>Passenger: ${booking.passengerName}</p>
+                    <p>Email: ${booking.passengerEmail}</p>
+                    <p>Seats Booked: ${booking.seatsBooked}</p>
+                    <p>Total Price: $${booking.totalPrice.toFixed(2)}</p>
+                    <p>Booking Date: ${new Date(
+                      booking.bookingDate
+                    ).toLocaleString()}</p>
+                `;
+          adminBookingsList.appendChild(bookingCard);
+        });
+      }
+
+      // Handle logout
+      function handleLogout() {
+        localStorage.removeItem("adminLoggedIn");
+        window.location.href = "index.html";
+      }
+
+      // Initial display of buses
+      displayBuses();
+    </script>
+  </body>
+</html>
